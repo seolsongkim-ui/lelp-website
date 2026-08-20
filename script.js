@@ -95,9 +95,12 @@
     var subnavLinks = subnav.querySelectorAll(".subnav-link");
 
     function updateHeaderOffset() {
-      if (siteHeader) {
-        document.documentElement.style.setProperty("--header-h", siteHeader.offsetHeight + "px");
-      }
+      var headerH = siteHeader ? siteHeader.offsetHeight : 0;
+      var subnavH = subnav.offsetHeight;
+      document.documentElement.style.setProperty("--header-h", headerH + "px");
+      // Extra 16px breathing room so a jumped-to section's heading isn't
+      // flush against the sticky bars — this is what fixes "top gets cut off".
+      document.documentElement.style.setProperty("--sticky-offset", headerH + subnavH + 16 + "px");
     }
     updateHeaderOffset();
     window.addEventListener("resize", updateHeaderOffset);

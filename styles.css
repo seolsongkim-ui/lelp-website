@@ -177,6 +177,7 @@ body[data-role="volunteer"] .lang-ko { display: none !important; }
 }
 .subnav .subnav-inner {
   display: flex;
+  justify-content: center;
   gap: 6px;
   overflow-x: auto;
   scrollbar-width: none;
@@ -195,6 +196,14 @@ body[data-role="volunteer"] .lang-ko { display: none !important; }
 }
 .subnav-link:hover { color: var(--ink); }
 .subnav-link.active { background: var(--red); color: #fff; }
+
+/* Anchor targets for the sub-nav (and any direct #hash link/reload) scroll to
+   stop below the sticky header + sub-nav, instead of having their top few
+   lines hidden underneath those sticky bars. --sticky-offset is measured and
+   set by script.js; the pixel value here is just a pre-JS/no-JS fallback. */
+#about, #activities, #participants, #testimonials {
+  scroll-margin-top: var(--sticky-offset, 120px);
+}
 
 .role-switch {
   display: inline-flex;
