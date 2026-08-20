@@ -87,4 +87,58 @@
       });
     });
   }
+
+  // ---- sub-nav (index.html only): sticky offset + scroll-spy ----
+  var subnav = document.querySelector(".subnav");
+  if (subnav) {
+    var siteHeader = document.querySelector(".site-header");
+    var subnavLinks = subnav.querySelectorAll(".subnav-link");
+
+    function updateHeaderOffset() {
+      if (siteHeader) {
+        document.documentElement.style.setProperty("--header-h", siteHeader.offsetHeight + "px");
+      }
+    }
+    updateHeaderOffset();
+    window.addEventListener("resize", updateHeaderOffset);
+    // Role switch can reflow the header (different copy length) — resettle shortly after.
+    roleButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        setTimeout(updateHeaderOffset, 50);
+      });
+    });
+
+    var sections = [];
+    subnavLinks.forEach(function (a) {
+      var id = a.getAttribute("href").replace("#", "");
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, link: a });
+    });
+
+    function setActiveTab(id) {
+      subnavLinks.forEach(function (a) {
+        a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+      });
+    }
+
+    if (sections.length && "IntersectionObserver" in window) {
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) setActiveTab(entry.target.id);
+          });
+        },
+        { rootMargin: "0px 0px -70% 0px" }
+      );
+      sections.forEach(function (s) {
+        observer.observe(s.el);
+      });
+    }
+
+    subnavLinks.forEach(function (a) {
+      a.addEventListener("click", function () {
+        setActiveTab(a.getAttribute("href").replace("#", ""));
+      });
+    });
+  }
 })();
