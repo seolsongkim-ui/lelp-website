@@ -177,11 +177,16 @@ body[data-role="volunteer"] .lang-ko { display: none !important; }
 }
 .subnav .subnav-inner {
   display: flex;
-  justify-content: center;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  /* Fallback before JS runs (and on mobile, where the "About" nav link isn't
+     visible to align against): centered on the page. script.js overrides
+     margin-left with a computed px value to center this tab group under the
+     "About" link in the main nav instead, whenever that link is visible. */
+  margin: 10px auto;
   gap: 6px;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 10px 24px;
 }
 .subnav-inner::-webkit-scrollbar { display: none; }
 .subnav-link {

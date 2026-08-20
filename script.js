@@ -104,10 +104,42 @@
     }
     updateHeaderOffset();
     window.addEventListener("resize", updateHeaderOffset);
+
+    // Center the tab group under the "About" (소개) link in the main nav —
+    // not under the page. Falls back to page-centered when that link isn't
+    // visible (e.g. on mobile, where .main-nav is hidden behind the burger).
+    var subnavInner = subnav.querySelector(".subnav-inner");
+    var aboutLink = document.querySelector(".main-nav a[href='index.html']");
+    var mainNav = document.querySelector(".main-nav");
+    function alignSubnavToAbout() {
+      var mainNavVisible = mainNav && getComputedStyle(mainNav).display !== "none";
+      var groupWidth = subnavInner.offsetWidth;
+      var targetCenterX;
+      if (mainNavVisible && aboutLink) {
+        var r = aboutLink.getBoundingClientRect();
+        targetCenterX = r.left + r.width / 2;
+      } else {
+        targetCenterX = window.innerWidth / 2;
+      }
+      var left = targetCenterX - groupWidth / 2;
+      var pad = 16;
+      if (left < pad) left = pad;
+      if (left + groupWidth > window.innerWidth - pad) left = window.innerWidth - pad - groupWidth;
+      subnavInner.style.marginLeft = left + "px";
+    }
+    alignSubnavToAbout();
+    window.addEventListener("resize", alignSubnavToAbout);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignSubnavToAbout);
+    }
+
     // Role switch can reflow the header (different copy length) — resettle shortly after.
     roleButtons.forEach(function (btn) {
       btn.addEventListener("click", function () {
-        setTimeout(updateHeaderOffset, 50);
+        setTimeout(function () {
+          updateHeaderOffset();
+          alignSubnavToAbout();
+        }, 50);
       });
     });
 
