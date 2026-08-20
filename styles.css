@@ -301,36 +301,43 @@ body[data-role="volunteer"] .lang-ko { display: none !important; }
 .btn-ghost:hover { border-color: var(--ink); }
 .btn-sm { padding: 9px 18px; font-size: 13px; }
 
-/* ---------- hero ---------- */
+/* ---------- hero: full-bleed photo with a fade-to-content overlay ---------- */
 .hero {
-  padding: 72px 0 56px;
-  background: var(--cream);
+  position: relative;
+  overflow: hidden;
+  padding: 104px 0 88px;
+  background: var(--cream); /* shows while the photo loads */
   border-bottom: 1px solid var(--gray-300);
 }
-.hero .container {
-  display: grid;
-  gap: 28px;
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
-.hero-grid {
-  grid-template-columns: 1.15fr 0.85fr;
-  align-items: center;
-  gap: 40px;
-}
-.hero-text { display: grid; gap: 28px; }
-.hero-photo {
-  margin: 0;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--gray-300);
-  box-shadow: var(--shadow-pop);
-}
-.hero-photo img {
+.hero-bg img {
   width: 100%;
   height: 100%;
-  aspect-ratio: 4 / 3;
   object-fit: cover;
-  display: block;
+  object-position: center 35%;
 }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    var(--cream) 0%,
+    rgba(253, 251, 250, 0.94) 32%,
+    rgba(253, 251, 250, 0.6) 55%,
+    rgba(253, 251, 250, 0.12) 78%,
+    rgba(253, 251, 250, 0) 95%
+  );
+}
+.hero .container {
+  position: relative;
+  z-index: 2;
+}
+.hero-text { display: grid; gap: 28px; max-width: 620px; }
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -1044,9 +1051,20 @@ section { padding: 72px 0; }
   .role-btn { padding: 6px 8px; font-size: 11px; }
   .header-cta { display: none; }
   .container { padding: 0 16px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 24px; }
-  .hero-photo { order: -1; }
-  .hero { padding: 32px 0 40px; }
+  .hero { padding: 40px 0 44px; }
+  .hero-text { max-width: 100%; }
+  /* Left-to-right fade doesn't leave room for legible text on a narrow
+     screen — fade top-to-bottom instead, with the photo peeking through
+     at the bottom. */
+  .hero-overlay {
+    background: linear-gradient(
+      180deg,
+      var(--cream) 0%,
+      rgba(253, 251, 250, 0.96) 55%,
+      rgba(253, 251, 250, 0.75) 78%,
+      rgba(253, 251, 250, 0.35) 100%
+    );
+  }
   section { padding: 48px 0; }
   .about-grid, .curriculum-grid, .events-grid, .benefits-grid,
   .benefits-list-simple, .grid-2,
